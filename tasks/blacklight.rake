@@ -8,6 +8,7 @@ require 'jettywrapper'
 require 'rspec/core/rake_task'
 
 
+desc "Run test suite"
 task :ci => 'jetty:clean' do
   ENV['environment'] = "test"
   jetty_params = Jettywrapper.load_config
