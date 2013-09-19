@@ -66,8 +66,6 @@ module Blacklight
 
 
           get "catalog", :to => 'catalog#index', :as => 'catalog_index'
-
-          get 'catalog/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
         end
       end
 

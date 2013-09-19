@@ -8,7 +8,6 @@ end
 
 Bundler::GemHelper.install_tasks
 
-# load rake tasks defined in lib/tasks that are not loaded in lib/active_fedora.rb
 load "tasks/blacklight.rake"
 
 task :default => [:ci]
