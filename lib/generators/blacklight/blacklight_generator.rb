@@ -6,8 +6,9 @@ class BlacklightGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates', __FILE__)
   
   argument     :model_name, :type => :string , :default => "user"
-  class_option :devise    , :type => :boolean, :default => false, :aliases => "-d", :desc => "Use Devise as authentication logic (this is default)."
-  
+  class_option :devise    , :type => :boolean, :default => false, :aliases => "-d", :desc => "Use Devise as authentication logic."
+  class_option :marc      , :type => :boolean, :default => false, :aliases => "-m", :desc => "Generate MARC-based demo ."
+
   desc """
 This generator makes the following changes to your application:
  1. Generates blacklight:models
@@ -70,7 +71,9 @@ Thank you for Installing Blacklight.
   end 
 
   def generate_blacklight_marc_demo
-    generate 'blacklight_marc:marc'
+    if options[:marc]
+      generate 'blacklight_marc:marc'
+    end
   end
 
   def inject_blacklight_routes
