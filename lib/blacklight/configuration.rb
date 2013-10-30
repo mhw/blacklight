@@ -12,7 +12,6 @@ module Blacklight
           unique_key = ((SolrDocument.unique_key if defined?(SolrDocument)) || 'id')
 
           {
-          :solr_path => 'select',
           :solr_request_handler => 'search',
           :default_solr_params => {},
           :document_solr_request_handler => nil,

@@ -83,8 +83,7 @@ module Blacklight::SolrHelper
   end
   
   def find(*args)
-    path = blacklight_config.solr_path
-    response = blacklight_solr.get(path, :params=> args[1])
+    response = blacklight_solr.get(args[0], :params=> args[1])
     Blacklight::SolrResponse.new(force_to_utf8(response), args[1])
   rescue Errno::ECONNREFUSED => e
     raise Blacklight::Exceptions::ECONNREFUSED.new("Unable to connect to Solr instance using #{blacklight_solr.inspect}")
@@ -408,11 +407,9 @@ module Blacklight::SolrHelper
     # better for us. 
     bench_start = Time.now
     solr_params = self.solr_search_params(user_params).merge(extra_controller_params)
-    solr_params[:qt] ||= blacklight_config.solr_request_handler
-    path = blacklight_config.solr_path
 
     # delete these parameters, otherwise rsolr will pass them through.
-    res = blacklight_solr.send_and_receive(path, :params=>solr_params)
+    res = blacklight_solr.send_and_receive(blacklight_config.solr_request_handler, :params=>solr_params)
     
     solr_response = Blacklight::SolrResponse.new(force_to_utf8(res), solr_params)
 
@@ -433,8 +430,6 @@ module Blacklight::SolrHelper
     p = blacklight_config.default_document_solr_params.merge({
       :id => id # this assumes the document request handler will map the 'id' param to the unique key field
     })
-
-    p[:qt] ||= 'document'
 
     p
   end
@@ -568,7 +563,7 @@ module Blacklight::SolrHelper
 
     solr_params[:fl] = '*'
     solr_params[:facet] = false
-    solr_response = find(blacklight_config.qt, solr_params)
+    solr_response = find(blacklight_config.solr_request_handler, solr_params)
 
     document_list = solr_response.docs.collect{|doc| SolrDocument.new(doc, solr_response) }
 
